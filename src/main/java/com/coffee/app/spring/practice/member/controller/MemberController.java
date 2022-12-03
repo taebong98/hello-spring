@@ -4,13 +4,17 @@ import com.coffee.app.spring.practice.member.dto.MemberPatchDto;
 import com.coffee.app.spring.practice.member.dto.MemberPostDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
+@Validated
 @RestController
 @RequestMapping("/v1/members")
 public class MemberController {
     @PostMapping
-    public ResponseEntity postMember(@RequestBody MemberPostDto memberPostDto) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         // 추후 서비스 계층 연동 필요
 
         return new ResponseEntity(memberPostDto, HttpStatus.CREATED);
