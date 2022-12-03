@@ -6,7 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RestController("/v1/members")
+@RestController
+@RequestMapping("/v1/members")
 public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@RequestBody MemberPostDto memberPostDto) {
@@ -16,7 +17,8 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") long memberId, MemberPatchDto memberPatchDto) {
+    public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
+                                      @RequestBody MemberPatchDto memberPatchDto) {
         memberPatchDto.setName("홍길동");
         memberPatchDto.setEmail("mockData@aaa.com");
         memberPatchDto.setPhone("010-1111-1111");
