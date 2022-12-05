@@ -23,10 +23,7 @@ public class MemberController {
 
     @PatchMapping("/{member-id}")
     public ResponseEntity patchMember(@PathVariable("member-id") @Min(1) long memberId,
-                                      @RequestBody MemberPatchDto memberPatchDto) {
-        memberPatchDto.setName("홍길동");
-        memberPatchDto.setEmail("mockData@aaa.com");
-        memberPatchDto.setPhone("010-1111-1111");
+                                      @Valid @RequestBody MemberPatchDto memberPatchDto) {
 
         return new ResponseEntity(memberPatchDto, HttpStatus.OK);
     }
