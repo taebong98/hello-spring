@@ -8,6 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @Validated
 @RestController
@@ -21,7 +22,7 @@ public class MemberController {
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-id") @Min(1) long memberId,
                                       @RequestBody MemberPatchDto memberPatchDto) {
         memberPatchDto.setName("홍길동");
         memberPatchDto.setEmail("mockData@aaa.com");
@@ -31,7 +32,7 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") long memberId) {
+    public ResponseEntity getMember(@PathVariable("member-id") @Min(1) long memberId) {
 
         return new ResponseEntity(HttpStatus.OK);
     }
@@ -43,7 +44,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") long memberId) {
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Min(1) long memberId) {
         System.out.println("delete Member");
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
