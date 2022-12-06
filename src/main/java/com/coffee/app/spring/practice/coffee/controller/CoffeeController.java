@@ -7,11 +7,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/v1/coffees")
 public class CoffeeController {
     @PostMapping
-    public ResponseEntity postCoffee(@RequestBody CoffeePostDto coffeePostDto) {
+    public ResponseEntity postCoffee(@Valid @RequestBody CoffeePostDto coffeePostDto) {
         // 비즈니스 로직 적용 필요
 
         return new ResponseEntity(coffeePostDto, HttpStatus.CREATED);
