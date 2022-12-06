@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 @RestController
 @RequestMapping("/v1/coffees")
@@ -20,19 +21,14 @@ public class CoffeeController {
     }
 
     @PatchMapping("/{coffee-id}")
-    public ResponseEntity patchCoffee(@PathVariable("coffee-id") long coffeeId,
+    public ResponseEntity patchCoffee(@Valid @PathVariable("coffee-id") @Min(1) long coffeeId,
                                       @RequestBody CoffeePatchDto coffeePatchDto) {
         // 비즈니스 로직 적용 필요
-        coffeePatchDto.setKorName("카페라떼");
-        coffeePatchDto.setEngName("cafe Latte");
-//        coffeePatchDto.setPrice(5000);
-        coffeePatchDto.setCoffeeCode("CLT");
-
         return new ResponseEntity<>(coffeePatchDto, HttpStatus.OK);
     }
 
     @GetMapping("/{coffee-id}")
-    public ResponseEntity getCoffee(@PathVariable("coffee-id") long coffeeId) {
+    public ResponseEntity getCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
         // 비즈니스 로직 적용 필요
 
         return new ResponseEntity(HttpStatus.OK);
@@ -46,7 +42,7 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/{coffee-id}")
-    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") long coffeeId) {
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
         System.out.println("# delete Coffees");
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
