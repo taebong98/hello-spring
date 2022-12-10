@@ -3,47 +3,64 @@ package com.coffee.app.spring.practice.coffee.controller;
 
 import com.coffee.app.spring.practice.coffee.dto.CoffeePatchDto;
 import com.coffee.app.spring.practice.coffee.dto.CoffeePostDto;
+import com.coffee.app.spring.practice.coffee.dto.CoffeeResponseDto;
+import com.coffee.app.spring.practice.coffee.entity.Coffee;
+import com.coffee.app.spring.practice.coffee.mapper.CoffeeMapper;
+import com.coffee.app.spring.practice.coffee.service.CoffeeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/coffees")
 public class CoffeeController {
+    private final CoffeeService coffeeService;
+    private final CoffeeMapper mapper;
+
     @PostMapping
     public ResponseEntity postCoffee(@Valid @RequestBody CoffeePostDto coffeePostDto) {
-        // 비즈니스 로직 적용 필요
+        Coffee coffee = mapper.coffeePostDtoToCoffee(coffeePostDto);
+        Coffee response = coffeeService.createCoffee(coffee);
 
-        return new ResponseEntity(coffeePostDto, HttpStatus.CREATED);
+        return new ResponseEntity(mapper.coffeeToCoffeeResponseDto(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{coffee-id}")
     public ResponseEntity patchCoffee(@Valid @PathVariable("coffee-id") @Min(1) long coffeeId,
                                       @RequestBody CoffeePatchDto coffeePatchDto) {
-        // 비즈니스 로직 적용 필요
-        return new ResponseEntity<>(coffeePatchDto, HttpStatus.OK);
+        Coffee coffee = mapper.coffeePatchDtoToCoffee(coffeePatchDto);
+        Coffee response = coffeeService.updateCoffee(coffee);
+
+        return new ResponseEntity<>(mapper.coffeeToCoffeeResponseDto(response), HttpStatus.OK);
     }
 
     @GetMapping("/{coffee-id}")
     public ResponseEntity getCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
-        // 비즈니스 로직 적용 필요
+        Coffee coffee = coffeeService.findCoffee(coffeeId);
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(mapper.coffeeToCoffeeResponseDto(coffee), HttpStatus.OK);
     }
 
     @GetMapping
     public ResponseEntity getCoffees() {
-        System.out.println("# get Coffees");
+        List<Coffee> coffees = coffeeService.findCoffees();
+        List<CoffeeResponseDto> response = coffees.stream()
+                .map(mapper::coffeeToCoffeeResponseDto)
+                .collect(Collectors.toList());
 
-        return new ResponseEntity(HttpStatus.OK);
+        return new ResponseEntity(response, HttpStatus.OK);
     }
 
     @DeleteMapping("/{coffee-id}")
     public ResponseEntity deleteCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
-        System.out.println("# delete Coffees");
+        coffeeService.deleteCoffee(coffeeId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }

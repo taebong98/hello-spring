@@ -28,7 +28,6 @@ public class MemberController {
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
-        // 추후 서비스 계층 연동 필요
         Member member = mapper.memberPostDtoToMember(memberPostDto);
         Member response = memberService.createMember(member);
         System.out.println(response.getName());
