@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,15 +30,12 @@ public class MemberController {
     public ResponseEntity postMember(@Valid @RequestBody MemberPostDto memberPostDto) {
         Member member = mapper.memberPostDtoToMember(memberPostDto);
         Member response = memberService.createMember(member);
-        System.out.println(response.getName());
-        System.out.println(response.getEmail());
-        System.out.println(response.getPhone());
 
         return new ResponseEntity(mapper.memberToResponseDto(response), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Min(1) long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
                                       @Valid @RequestBody MemberPatchDto memberPatchDto) {
         Member member = mapper.memberPatchDtoToMember(memberPatchDto);
         Member patchMember = memberService.updateMember(member);
@@ -48,7 +45,7 @@ public class MemberController {
     }
 
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Min(1) long memberId) {
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
         Member response = memberService.findMember(memberId);
 
         return new ResponseEntity(mapper.memberToResponseDto(response), HttpStatus.OK);
@@ -65,7 +62,7 @@ public class MemberController {
     }
 
     @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(@PathVariable("member-id") @Min(1) long memberId) {
+    public ResponseEntity deleteMember(@PathVariable("member-id") @Positive long memberId) {
         memberService.deleteMember(memberId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

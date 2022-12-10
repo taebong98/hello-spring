@@ -13,7 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,7 +33,7 @@ public class CoffeeController {
     }
 
     @PatchMapping("/{coffee-id}")
-    public ResponseEntity patchCoffee(@Valid @PathVariable("coffee-id") @Min(1) long coffeeId,
+    public ResponseEntity patchCoffee(@Valid @PathVariable("coffee-id") @Positive long coffeeId,
                                       @RequestBody CoffeePatchDto coffeePatchDto) {
         Coffee coffee = mapper.coffeePatchDtoToCoffee(coffeePatchDto);
         Coffee response = coffeeService.updateCoffee(coffee);
@@ -42,7 +42,7 @@ public class CoffeeController {
     }
 
     @GetMapping("/{coffee-id}")
-    public ResponseEntity getCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
+    public ResponseEntity getCoffee(@PathVariable("coffee-id") @Positive long coffeeId) {
         Coffee coffee = coffeeService.findCoffee(coffeeId);
 
         return new ResponseEntity(mapper.coffeeToCoffeeResponseDto(coffee), HttpStatus.OK);
@@ -59,7 +59,7 @@ public class CoffeeController {
     }
 
     @DeleteMapping("/{coffee-id}")
-    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") @Min(1) long coffeeId) {
+    public ResponseEntity deleteCoffee(@PathVariable("coffee-id") @Positive long coffeeId) {
         coffeeService.deleteCoffee(coffeeId);
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
