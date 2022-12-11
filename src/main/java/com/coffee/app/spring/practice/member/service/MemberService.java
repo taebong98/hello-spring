@@ -1,5 +1,7 @@
 package com.coffee.app.spring.practice.member.service;
 
+import com.coffee.app.spring.practice.exception.BusinessLogicException;
+import com.coffee.app.spring.practice.exception.ExceptionCode;
 import com.coffee.app.spring.practice.member.entity.Member;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +33,8 @@ public class MemberService {
         // TODO member 객체는 나중에 DB에 조회하는 로직으로 변경해야 한다.
         Member member = new Member(1L, "hgd1@naver.com", "홍길동1", "010-1111-1111");
 
-        return member;
+        throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND); // 찾는 회원이 없는 상황을 가정해서 예외를 발생시킨다.
+//        return member;
     }
 
     public List<Member> findMembers() {
