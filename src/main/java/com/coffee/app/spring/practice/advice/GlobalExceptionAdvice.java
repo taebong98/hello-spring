@@ -30,8 +30,8 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleBusinessLogicException(BusinessLogicException e) {
-        System.out.println(e.getExceptionCode().getStatus());
-        System.out.println(e.getMessage());
-        return null;
+        final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
+
+        return response;
     }
 }

@@ -1,5 +1,7 @@
 package com.coffee.app.spring.practice.response;
 
+import com.coffee.app.spring.practice.exception.BusinessLogicException;
+import com.coffee.app.spring.practice.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -11,10 +13,17 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ErrorResponse {
+    private int status;
+    private String message;
     private List<FieldErrors> fieldErrors;
     private List<ConstraintViolationError> violationErrors;
 
-    private ErrorResponse(List<FieldErrors> fieldErrors, List<ConstraintViolationError> violationErrors) {
+    public ErrorResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
+    }
+
+    public ErrorResponse(List<FieldErrors> fieldErrors, List<ConstraintViolationError> violationErrors) {
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
     }
@@ -25,6 +34,10 @@ public class ErrorResponse {
 
     public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
         return new ErrorResponse(null, ConstraintViolationError.of(violations));
+    }
+
+    public static ErrorResponse of(ExceptionCode exceptionCode) {
+        return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
     }
 
     @Getter
@@ -63,7 +76,7 @@ public class ErrorResponse {
             this.reason = reason;
         }
 
-        public static List<ConstraintViolationError> of (Set<ConstraintViolation<?>> constraintViolations) {
+        public static List<ConstraintViolationError> of(Set<ConstraintViolation<?>> constraintViolations) {
             return constraintViolations.stream()
                     .map(constraintViolation -> new ConstraintViolationError(
                             constraintViolation.getPropertyPath().toString(),
