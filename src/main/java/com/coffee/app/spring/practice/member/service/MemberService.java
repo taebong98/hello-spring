@@ -53,6 +53,7 @@ public class MemberService {
 
     public void deleteMember(long memberId) {
         // TODO should business logic
+        throw new NullPointerException();
 
     }
 }
