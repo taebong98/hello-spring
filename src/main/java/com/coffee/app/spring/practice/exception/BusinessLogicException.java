@@ -1,5 +1,6 @@
 package com.coffee.app.spring.practice.exception;
 
+
 import lombok.Getter;
 
 public class BusinessLogicException extends RuntimeException{

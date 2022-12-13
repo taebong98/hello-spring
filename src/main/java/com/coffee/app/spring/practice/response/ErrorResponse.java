@@ -1,6 +1,6 @@
 package com.coffee.app.spring.practice.response;
 
-import com.coffee.app.spring.practice.exception.BusinessLogicException;
+
 import com.coffee.app.spring.practice.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.validation.BindingResult;
@@ -11,29 +11,30 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+
 @Getter
 public class ErrorResponse {
     private int status;
     private String message;
-    private List<FieldErrors> fieldErrors;
-    private List<ConstraintViolationError> violationErrors;
+    private List<FieldErrorInfo> fieldErrors;
+    private List<ConstraintViolationErrorInfo> violationErrors;
 
-    public ErrorResponse(int status, String message) {
-        this.status = status;
-        this.message = message;
-    }
-
-    public ErrorResponse(List<FieldErrors> fieldErrors, List<ConstraintViolationError> violationErrors) {
+    private ErrorResponse(List<FieldErrorInfo> fieldErrors, List<ConstraintViolationErrorInfo> violationErrors) {
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
     }
 
-    public static ErrorResponse of(BindingResult bindingResult) {
-        return new ErrorResponse(FieldErrors.of(bindingResult), null);
+    private ErrorResponse(int status, String message) {
+        this.status = status;
+        this.message = message;
     }
 
-    public static ErrorResponse of(Set<ConstraintViolation<?>> violations) {
-        return new ErrorResponse(null, ConstraintViolationError.of(violations));
+    public static ErrorResponse of(BindingResult bindingResult) {
+        return new ErrorResponse(FieldErrorInfo.of(bindingResult), null);
+    }
+
+    public static ErrorResponse of(Set<ConstraintViolation<?>> constraintViolations) {
+        return new ErrorResponse(null, ConstraintViolationErrorInfo.of(constraintViolations));
     }
 
     public static ErrorResponse of(ExceptionCode exceptionCode) {
@@ -41,44 +42,45 @@ public class ErrorResponse {
     }
 
     @Getter
-    public static class FieldErrors {
+    public static class FieldErrorInfo {
         private String field;
         private Object rejectedValue;
         private String reason;
 
-        private FieldErrors(String field, Object rejectedValue, String reason) {
+        private FieldErrorInfo(String field, Object rejectedValue, String reason) {
             this.field = field;
             this.rejectedValue = rejectedValue;
             this.reason = reason;
         }
 
-        public static List<FieldErrors> of(BindingResult bindingResult) {
+        public static List<FieldErrorInfo> of(BindingResult bindingResult) {
             final List<FieldError> fieldErrors = bindingResult.getFieldErrors();
 
             return fieldErrors.stream()
-                    .map(error -> new FieldErrors(
+                    .map(error -> new FieldErrorInfo(
                             error.getField(),
-                            error.getRejectedValue() == null ? "" : error.getRejectedValue().toString(),
+                            error.getRejectedValue() == null?"" : error.getRejectedValue().toString(),
                             error.getDefaultMessage()
-                    )).collect(Collectors.toList());
+                    ))
+                    .collect(Collectors.toList());
         }
     }
 
     @Getter
-    public static class ConstraintViolationError {
+    public static class ConstraintViolationErrorInfo {
         private String propertyPath;
         private Object rejectedValue;
         private String reason;
 
-        private ConstraintViolationError(String propertyPath, Object rejectedValue, String reason) {
+        private ConstraintViolationErrorInfo(String propertyPath, Object rejectedValue, String reason) {
             this.propertyPath = propertyPath;
             this.rejectedValue = rejectedValue;
             this.reason = reason;
         }
 
-        public static List<ConstraintViolationError> of(Set<ConstraintViolation<?>> constraintViolations) {
+        public static List<ConstraintViolationErrorInfo> of(Set<ConstraintViolation<?>> constraintViolations){
             return constraintViolations.stream()
-                    .map(constraintViolation -> new ConstraintViolationError(
+                    .map(constraintViolation -> new ConstraintViolationErrorInfo(
                             constraintViolation.getPropertyPath().toString(),
                             constraintViolation.getInvalidValue().toString(),
                             constraintViolation.getMessage()
