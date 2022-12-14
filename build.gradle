@@ -27,6 +27,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-validation' // 유효성 검증 의존 라이브러리
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final' // mapstruct 의존 라이브러리
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' // mapstruct 의존 라이브러리
+	runtimeOnly 'com.h2database:h2' // h2 데이터베이스
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Data JPA
 }
 
 tasks.named('test') {
