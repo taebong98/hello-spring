@@ -29,6 +29,7 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final' // mapstruct 의존 라이브러리
 	runtimeOnly 'com.h2database:h2' // h2 데이터베이스
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa' // Spring Data JPA
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.8.1' // 쿼리 파라미터
 }
 
 tasks.named('test') {
