@@ -3,18 +3,25 @@ package com.coffee.app.spring.practice.member.service;
 import com.coffee.app.spring.practice.exception.BusinessLogicException;
 import com.coffee.app.spring.practice.exception.ExceptionCode;
 import com.coffee.app.spring.practice.member.entity.Member;
+import com.coffee.app.spring.practice.member.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MemberService {
+
+    private final MemberRepository memberRepository;
+
     public Member createMember(Member member) {
         // TODO should business logic
+        // TODO DB에 있는 Member 인지 검증로직 구현
+        verifyExistsEmail(member.getEmail());
 
-        // TODO member 객체는 나중에 DB에 저장 후 되돌려받는 로직으로 변경해야 한다.
-        Member createMember = member;
+        Member createMember = memberRepository.save(member);
         return createMember;
     }
 
@@ -31,10 +38,8 @@ public class MemberService {
         // TODO should business logic
 
         // TODO member 객체는 나중에 DB에 조회하는 로직으로 변경해야 한다.
-        Member member = new Member(1L, "hgd1@naver.com", "홍길동1", "010-1111-1111");
-        throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
 
-//        return member;
+        return null;
     }
 
     public List<Member> findMembers() {
@@ -42,18 +47,18 @@ public class MemberService {
 
         // TODO member 객체는 나중에 DB에 조회하는 로직으로 변경해야 한다.
 
-        List<Member> members = new ArrayList<>();
-        Member member1 = new Member(1L, "hgd1@naver.com", "홍길동1", "010-1111-1111");
-        Member member2 = new Member(2L, "hgd2@naver.com", "홍길동2", "010-2222-2222");
-        members.add(member1);
-        members.add(member2);
-
-        return members;
+        return null;
     }
 
     public void deleteMember(long memberId) {
         // TODO should business logic
         throw new NullPointerException();
 
+    }
+
+
+    private void verifyExistsEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent()) throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS);
     }
 }
