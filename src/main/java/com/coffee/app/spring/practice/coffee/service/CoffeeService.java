@@ -25,18 +25,12 @@ public class CoffeeService {
     public Coffee findCoffee(long coffeeId) {
         // TODO should business logic
 
-        Coffee coffee = new Coffee(1L, "아메리카노", "Americano", 3000, "AMC");
-        return coffee;
+        return null;
     }
 
     public List<Coffee> findCoffees() {
         // TODO should business logic
-
-        Coffee coffee1 = new Coffee(1L, "아메리카노", "Americano", 3000, "AMC");
-        Coffee coffee2 = new Coffee(2L, "카페라떼", "Cafe Latte", 5000, "CLT");
-
-        List<Coffee> coffees = List.of(coffee1, coffee2);
-        return coffees;
+        return null;
     }
 
     public void deleteCoffee(long coffeeId) {

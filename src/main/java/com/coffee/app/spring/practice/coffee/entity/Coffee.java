@@ -1,12 +1,17 @@
 package com.coffee.app.spring.practice.coffee.entity;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 @Getter @Setter
-@AllArgsConstructor
+@Entity
 public class Coffee {
+    @Id
+    @GeneratedValue
     private long coffeeId;
     private String korName;
     private String engName;
