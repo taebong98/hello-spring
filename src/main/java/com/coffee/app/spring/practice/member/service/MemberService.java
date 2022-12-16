@@ -17,43 +17,38 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member createMember(Member member) {
-        // TODO should business logic
-        // TODO DB에 있는 Member 인지 검증로직 구현
         verifyExistsEmail(member.getEmail());
-
         Member createMember = memberRepository.save(member);
         return createMember;
     }
 
     public Member updateMember(Member member) {
-        // TODO should business logic
+        Member findMember = findMember(member.getMemberId());
 
-        // TODO member 객체는 나중에 DB에서 조회후 되돌려받는 로직으로 변경해야 한다.
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
 
-        Member updatedMember = member;
-        return updatedMember;
+        Optional.ofNullable(member.getPhone())
+                .ifPresent(phone -> findMember.setPhone(phone));
+
+        Optional.ofNullable(member.getMemberStatus())
+                .ifPresent(memberStatus -> findMember.setMemberStatus(memberStatus));
+        return memberRepository.save(findMember);
     }
 
     public Member findMember(long memberId) {
-        // TODO should business logic
-
-        // TODO member 객체는 나중에 DB에 조회하는 로직으로 변경해야 한다.
-
-        return null;
+        Optional<Member> optionalMember = memberRepository.findById(memberId);
+        Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return findMember;
     }
 
     public List<Member> findMembers() {
-        // TODO should business logic
-
-        // TODO member 객체는 나중에 DB에 조회하는 로직으로 변경해야 한다.
-
-        return null;
+        return (List<Member>) memberRepository.findAll();
     }
 
     public void deleteMember(long memberId) {
-        // TODO should business logic
-        throw new NullPointerException();
-
+        Member member = findMember(memberId);
+        memberRepository.delete(member);
     }
 
 

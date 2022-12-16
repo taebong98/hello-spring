@@ -1,5 +1,6 @@
 package com.coffee.app.spring.practice.member.dto;
 
+import com.coffee.app.spring.practice.member.entity.Member;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
