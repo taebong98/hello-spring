@@ -37,6 +37,8 @@ public class CoffeeController {
     @PatchMapping("/{coffee-id}")
     public ResponseEntity patchCoffee(@PathVariable("coffee-id") @Positive long coffeeId,
                                       @Valid @RequestBody CoffeePatchDto coffeePatchDto) {
+        coffeePatchDto.setCoffeeId(coffeeId);
+
         Coffee coffee = mapper.coffeePatchDtoToCoffee(coffeePatchDto);
         Coffee response = coffeeService.updateCoffee(coffee);
 

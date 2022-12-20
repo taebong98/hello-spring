@@ -1,5 +1,7 @@
 package com.coffee.app.spring.practice.coffee.dto;
 
+import com.coffee.app.spring.practice.coffee.entity.Coffee;
+import com.coffee.app.spring.practice.coffee.entity.Coffee.CoffeeStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -11,4 +13,9 @@ public class CoffeeResponseDto {
     private String engName;
     private int price;
     private String coffeeCode;
+    private CoffeeStatus coffeeStatus;
+
+    public String getCoffeeStatus() {
+        return coffeeStatus.getStatus();
+    }
 }

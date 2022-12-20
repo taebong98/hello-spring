@@ -6,22 +6,25 @@ import com.coffee.app.spring.practice.member.entity.Member;
 import com.coffee.app.spring.practice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-
     private final MemberRepository memberRepository;
 
+    @Transactional
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
         Member createMember = memberRepository.save(member);
         return createMember;
     }
 
+    @Transactional
     public Member updateMember(Member member) {
         Member findMember = findMember(member.getMemberId());
 
@@ -33,19 +36,24 @@ public class MemberService {
 
         Optional.ofNullable(member.getMemberStatus())
                 .ifPresent(memberStatus -> findMember.setMemberStatus(memberStatus));
+
+        findMember.setModifiedAt(LocalDateTime.now());
         return memberRepository.save(findMember);
     }
 
+    @Transactional(readOnly = true)
     public Member findMember(long memberId) {
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
 
+    @Transactional(readOnly = true)
     public List<Member> findMembers() {
         return (List<Member>) memberRepository.findAll();
     }
 
+    @Transactional
     public void deleteMember(long memberId) {
         Member member = findMember(memberId);
         memberRepository.delete(member);
