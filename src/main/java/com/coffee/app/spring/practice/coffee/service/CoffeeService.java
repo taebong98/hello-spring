@@ -4,6 +4,7 @@ import com.coffee.app.spring.practice.coffee.entity.Coffee;
 import com.coffee.app.spring.practice.coffee.repository.CoffeeRepository;
 import com.coffee.app.spring.practice.exception.BusinessLogicException;
 import com.coffee.app.spring.practice.exception.ExceptionCode;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

@@ -5,6 +5,9 @@ import com.coffee.app.spring.practice.exception.ExceptionCode;
 import com.coffee.app.spring.practice.member.entity.Member;
 import com.coffee.app.spring.practice.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +52,8 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public List<Member> findMembers() {
-        return (List<Member>) memberRepository.findAll();
+    public Page<Member> findMembers(int page, int size) {
+        return memberRepository.findAll(PageRequest.of(page, size, Sort.by("memberId").descending()));
     }
 
     @Transactional
